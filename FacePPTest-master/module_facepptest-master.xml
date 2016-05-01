@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_facepptest-master" default="compile.module.facepptest-master">
+  <dirname property="module.facepptest-master.basedir" file="${ant.file.module_facepptest-master}"/>
+  
+  <property name="module.jdk.home.facepptest-master" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.facepptest-master" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.facepptest-master" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.facepptest-master" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="facepptest-master.output.dir" value="${module.facepptest-master.basedir}/out/production/FacePPTest-master"/>
+  <property name="facepptest-master.testoutput.dir" value="${module.facepptest-master.basedir}/out/test/FacePPTest-master"/>
+  
+  <path id="facepptest-master.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="facepptest-master.module.production.classpath">
+    <path refid="${module.jdk.classpath.facepptest-master}"/>
+    <path refid="library.faceppsdk_min.classpath"/>
+  </path>
+  
+  <path id="facepptest-master.runtime.production.module.classpath">
+    <pathelement location="${facepptest-master.output.dir}"/>
+    <path refid="library.faceppsdk_min.classpath"/>
+  </path>
+  
+  <path id="facepptest-master.module.classpath">
+    <path refid="${module.jdk.classpath.facepptest-master}"/>
+    <pathelement location="${facepptest-master.output.dir}"/>
+    <path refid="library.faceppsdk_min.classpath"/>
+  </path>
+  
+  <path id="facepptest-master.runtime.module.classpath">
+    <pathelement location="${facepptest-master.testoutput.dir}"/>
+    <pathelement location="${facepptest-master.output.dir}"/>
+    <path refid="library.faceppsdk_min.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.facepptest-master">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.facepptest-master">
+    <patternset refid="excluded.from.module.facepptest-master"/>
+  </patternset>
+  
+  <path id="facepptest-master.module.sourcepath">
+    <dirset dir="${module.facepptest-master.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.facepptest-master" depends="compile.module.facepptest-master.production,compile.module.facepptest-master.tests" description="Compile module FacePPTest-master"/>
+  
+  <target name="compile.module.facepptest-master.production" depends="register.custom.compilers" description="Compile module FacePPTest-master; production classes">
+    <mkdir dir="${facepptest-master.output.dir}"/>
+    <javac2 destdir="${facepptest-master.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.facepptest-master}/javac">
+      <compilerarg line="${compiler.args.facepptest-master}"/>
+      <bootclasspath refid="facepptest-master.module.bootclasspath"/>
+      <classpath refid="facepptest-master.module.production.classpath"/>
+      <src refid="facepptest-master.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.facepptest-master"/>
+    </javac2>
+    
+    <copy todir="${facepptest-master.output.dir}">
+      <fileset dir="${module.facepptest-master.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.facepptest-master.tests" depends="register.custom.compilers,compile.module.facepptest-master.production" description="compile module FacePPTest-master; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.facepptest-master" description="cleanup module">
+    <delete dir="${facepptest-master.output.dir}"/>
+    <delete dir="${facepptest-master.testoutput.dir}"/>
+  </target>
+</project>
